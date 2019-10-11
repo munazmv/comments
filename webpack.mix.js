@@ -1,4 +1,6 @@
 const mix = require('laravel-mix');
+const path = require('path');
+const tailwindcss = require('tailwindcss');
 
 /*
  |--------------------------------------------------------------------------
@@ -11,5 +13,23 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js')
-    .sass('resources/sass/app.scss', 'public/css');
+if (process.env.npm_lifecycle_event !== 'hot') {
+  mix.version()
+}
+
+mix.webpackConfig({
+  devServer: {
+    contentBase: path.resolve(__dirname, 'public'),
+    disableHostCheck: true
+  }
+});
+
+mix.react('resources/js/app.js', 'public/js');
+
+
+mix.sass('resources/sass/app.scss', 'public/css')
+  .options({
+    processCssUrls: false,
+    postCss: [ tailwindcss('./tailwind.config.js') ],
+  });
+
