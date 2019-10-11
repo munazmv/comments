@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Modules\User\Models\Comment;
+use Modules\User\Models\User;
 
 class DatabaseSeeder extends Seeder
 {
@@ -11,6 +13,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->call(UsersTableSeeder::class);
+        factory(User::class)->create([
+            'email' => 'munaz7762650@gmail.com'
+        ]);
+        factory(Comment::class, 5)->create();
     }
 }
