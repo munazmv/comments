@@ -2,6 +2,7 @@
 
 namespace Modules\Web\Auth;
 
+use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Modules\Auth\Services\AuthService;
 use Modules\Core\Base\BaseController;
@@ -39,6 +40,13 @@ class AuthController extends BaseController
         return view('auth/login');
     }
 
+    /**
+     * Attempt login
+     *
+     * @param AttemptLoginRequest $request
+     *
+     * @return RedirectResponse
+     */
     public function attemptLogin(AttemptLoginRequest $request)
     {
         $success = $this->authService->attemptLogin($request->email, $request->password);
@@ -46,5 +54,14 @@ class AuthController extends BaseController
         if(!$success) {
             return redirect()->back()->with('error', "Username or password incorrect!");
         }
+
+        return redirect()->route('app.show');
+    }
+
+    public function logout()
+    {
+        $this->authService->logout();
+
+        return redirect()->route('auth.login');
     }
 }
