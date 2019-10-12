@@ -8,8 +8,8 @@
     <title>App - Comments</title>
     <link rel="stylesheet" href="{{mix('css/app.css')}}">
 </head>
-<body>
-<div id="root"></div>
+<body class="h-screen">
+<div class="h-full" id="root"></div>
 <script src="{{mix('js/app.js')}}"></script>
 </body>
 </html>
