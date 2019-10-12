@@ -15,6 +15,19 @@ Route::group([
         // Get Auth user
         Route::get('/', 'AuthController@getUser');
     });
+
+    // Comment
+    Route::group([
+        'prefix' => 'comments',
+        'namespace' => 'Comment'
+    ], function() {
+
+        // Get all comments
+        Route::get('/', 'CommentController@all');
+
+        // Add comment
+        Route::post('/', 'CommentController@store');
+    });
 });
 
 

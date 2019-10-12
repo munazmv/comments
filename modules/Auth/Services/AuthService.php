@@ -28,13 +28,6 @@ class AuthService
            return false;
         }
 
-        $user = $this->getAuthenticatedUser();
-
-        // renew authenticated user token for every successful login attempt
-        $user->update([
-            'api_token' => $this->generateToken()
-        ]);
-
         return true;
     }
 
@@ -62,9 +55,16 @@ class AuthService
      *
      * @return string
      */
-    private function generateToken()
+    public function generateNewToken()
     {
-        return hash('sha256', Str::random(60));
+        $user = $this->getAuthenticatedUser();
+        $token = Str::random(60);
+
+        $user->update([
+            'api_token' => hash('sha256', $token)
+        ]);
+
+        return $token;
     }
 
     /**

@@ -28,4 +28,20 @@ class BaseJsonResource extends JsonResource
 
         return $date->format(Settings::DEFAULT_DATE_FORMAT);
     }
+
+    /**
+     * Build date diff for humans
+     *
+     * @param Carbon|null $date
+     *
+     * @return string
+     */
+    public function dateDiff(Carbon $date = null)
+    {
+        if($date === null) {
+            return '';
+        }
+
+        return $date->diffForHumans();
+    }
 }

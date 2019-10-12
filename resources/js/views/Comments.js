@@ -1,23 +1,41 @@
 import React from 'react'
 
-import Modal from '../components/Modal'
 import AddCommentModal from "./AddCommentModal";
+import {allComments} from "../apiServices/CommentService";
+import CommentCard from './CommentCard'
 
 export default class Comments extends React.Component {
 
   state = {
+    comments: [],
     showAddComment: false
   }
 
-  handleAddComment = (comment) => {
-    this.setState({
-      showAddComment: false
+  componentDidMount() {
+    this.getAllComments();
+  }
+
+  getAllComments = () => {
+    allComments().then(response => {
+      this.setState({comments: response.data});
     })
   }
 
+
+
+  handleAddComment = () => {
+    this.setState({
+      showAddComment: false
+    });
+    this.getAllComments();
+  }
+
   render() {
+
+    const {comments} = this.state;
+
     return (
-      <div className={`h-full flex flex-col bg-gray-100`}>
+      <div className={`h-full flex flex-col`}>
         <div className={`bg-blue-600 h-2 lg:h-4`}></div>
         <div className={`lg:mt-24 w-full lg:w-2/5 lg:mx-auto p-2`}>
           <div className={`flex justify-between mb-2 lg:mb-4`}>
@@ -35,13 +53,9 @@ export default class Comments extends React.Component {
               </button>
             </div>
           </div>
-          <div className={`w-full shadow mb-6 bg-white text-gray-700 font-mono flex flex-col`}>
-            <div className={`flex-1 p-3`}>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad consectetur dolorum ea facere impedit, incidunt ipsa molestias natus, nulla numquam odio quae quaerat quam quasi quidem
-              reprehenderit similique? Consectetur, rem!
-            </div>
-            <div className={`h-1 bg-blue-400 lg:hidden`}></div>
-          </div>
+          {comments.map(comment => (
+            <CommentCard key={comment.id} comment={comment} />
+          ))}
         </div>
         <AddCommentModal
           onAddComment={this.handleAddComment}

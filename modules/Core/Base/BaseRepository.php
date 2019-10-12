@@ -3,15 +3,19 @@
 namespace Modules\Core;
 
 use Eloquent;
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Modules\Auth\Services\AuthService;
+use Modules\User\Models\User;
 
 /**
  * Class BaseRepository
  *
  * @package Modules\Core
  */
-class BaseRepository
+abstract class BaseRepository
 {
     /**
      * @var Eloquent
@@ -20,13 +24,25 @@ class BaseRepository
 
     /**
      * BaseRepository constructor.
-     *
-     * @param Eloquent $model
      */
-    public function __construct(Eloquent $model)
+    public function __construct()
     {
+        $model = $this->model();
+
+        if(!$model instanceof Eloquent) {
+            $repositoryName = get_class($this);
+            throw new Exception("{$repositoryName} provided model is invalid");
+        }
+
         $this->model = $model;
     }
+
+    /**
+     * Get the repository model
+     *
+     * @return Eloquent`
+     */
+    abstract protected function model();
 
     /**
      * Find model or fail
@@ -121,5 +137,28 @@ class BaseRepository
         $model->delete();
 
         return true;
+    }
+
+    /**
+     * Get authenticated user
+     *
+     * @return User
+     */
+    protected function currentUser()
+    {
+        return app(AuthService::class)->getAuthenticatedUser();
+    }
+
+    /**
+     * Get all records by the current user
+     *
+     * @return Collection
+     */
+    public function getAllByCurrentUser()
+    {
+        return $this->query()
+            ->where('user_id', $this->currentUser()->id)
+            ->orderByDesc('created_at')
+            ->get();
     }
 }

@@ -1,8 +1,13 @@
 import React from 'react'
 
 import Modal from '../components/Modal'
+import {createComment} from "../apiServices/CommentService";
 
 export default class AddCommentModal extends React.Component {
+
+  state = {
+    error: null
+  }
 
   ref = React.createRef();
 
@@ -13,17 +18,34 @@ export default class AddCommentModal extends React.Component {
     }
   }
 
+  handleOnOk = () => {
+    const value = this.ref.current.value;
+    this.setState({error: null});
+
+    createComment({comment: value}).then(response => {
+      console.log('response here');
+      this.props.onAddComment();
+    }).catch((error) => {
+      console.error(error);
+      if(response.status === 422) {
+        this.setState({error: 'No content in comment input!'})
+      }
+    });
+  }
+
   render() {
-    const {show, onAddComment, handleOnCancel} = this.props;
+    const {error} = this.state;
+    const {show, handleOnCancel} = this.props;
 
     return (
-      <Modal show={show} handleOnOk={onAddComment} handleOnCancel={handleOnCancel} title={`Add Comment`}>
+      <Modal show={show} okButtonText={`Add Comment`} handleOnOk={this.handleOnOk} handleOnCancel={handleOnCancel} title={`Add Comment`}>
         <textarea
           ref={this.ref}
           tabIndex="1"
-          className={`p-2 h-24 resize-none w-full border border-gray-400 outline-none`}
+          className={`font-mono p-2 h-24 resize-none w-full border border-gray-400 outline-none`}
           placeholder={`Type a comment here..`}
         ></textarea>
+        {error ? <span className="text-red-600 text-xs">{error}</span> : null}
       </Modal>
     )
   }
