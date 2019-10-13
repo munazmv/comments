@@ -8,6 +8,7 @@ After cloning the repository to your computer, run the following commands.
 1. Run these commands from terminal
     * `composer install`
     * `php artisan key:generate`
+    * `cp .env.example .env` and make sure to create a database schema and update the DB values accordingly.
     * `php artisan migrate --seed`
     * `php artisan storage:link`
     
