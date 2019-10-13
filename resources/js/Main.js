@@ -1,17 +1,27 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {HashRouter as Router, Route, Switch} from "react-router-dom";
+import {ToastContainer} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css'
 import routes from './routes'
+import {getAuthenticatedUser} from "./apiServices/AuthService";
 
 class Main extends React.Component {
 
   state = {
+    user: null,
     flattenedRoutes: []
   }
 
   componentDidMount() {
     this.setState({
       flattenedRoutes: this.buildRoutes([], '', routes)
+    });
+
+    getAuthenticatedUser().then(response => {
+      this.setState({
+        user: response.data
+      })
     });
   }
 
@@ -45,13 +55,18 @@ class Main extends React.Component {
 
   render() {
 
+    // boot app only after user loads
+    if (this.state.user === null) {
+      return null;
+    }
+
     const {flattenedRoutes} = this.state;
 
     const renderRoutes = () => {
       return flattenedRoutes.map(route => {
         return <Route key={route.path} exact={route.exact} path={route.path} render={(routeProps) => {
           const Component = route.component;
-          return <Component {...routeProps}/>
+          return <Component user={this.state.user} {...routeProps}/>
         }}></Route>;
 
       });
@@ -59,9 +74,10 @@ class Main extends React.Component {
 
     return (
       <Router>
-          <Switch>
-            {renderRoutes()}
-          </Switch>
+        <ToastContainer/>
+        <Switch>
+          {renderRoutes()}
+        </Switch>
       </Router>
     )
   }

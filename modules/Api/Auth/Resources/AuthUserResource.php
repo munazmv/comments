@@ -29,6 +29,7 @@ class AuthUserResource extends BaseJsonResource
             'id' => $this->resource->id,
             'name' => $this->resource->formattedName(),
             'email' => $this->resource->email,
+            'avatar_path' => url($this->resource->avatar_path),
             'joined_on' => $this->date($this->resource->created_at)
         ];
     }

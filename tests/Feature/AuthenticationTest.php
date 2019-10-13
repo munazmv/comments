@@ -21,7 +21,6 @@ class AuthenticationTest extends TestCase
 
         $response->assertStatus(302);
 
-        /** @var User $user */
         $password = 'secret';
 
         $user = $this->createuser([

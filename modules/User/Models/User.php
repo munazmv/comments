@@ -14,6 +14,7 @@ use Illuminate\Notifications\Notifiable;
  * @property string $name
  * @property string $email
  * @property string $api_token
+ * @property string $avatar_path
  *
  * @property Carbon $created_at
  * @property Carbon $updated_at

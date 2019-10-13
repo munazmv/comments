@@ -60,9 +60,11 @@ class AuthService
         $user = $this->getAuthenticatedUser();
         $token = Str::random(60);
 
+
         $user->update([
             'api_token' => hash('sha256', $token)
         ]);
+
 
         return $token;
     }

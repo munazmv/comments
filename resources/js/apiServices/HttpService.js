@@ -24,7 +24,7 @@ async function makeRequest(method, url, {payload, params}) {
 
     return response.data;
   } catch(error) {
-    return error;
+    throw error
   }
 }
 
