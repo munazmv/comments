@@ -1,5 +1,5 @@
 ## About 
-A small application built on **Laravel** and **React**.z
+A small application built on **Laravel** and **React**.
 
 ## Setup
 
