@@ -6,6 +6,7 @@ use Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Modules\Auth\Services\AuthService;
 use Modules\User\Models\User;
@@ -29,7 +30,7 @@ abstract class BaseRepository
     {
         $model = $this->model();
 
-        if(!$model instanceof Eloquent) {
+        if(!$model instanceof Eloquent && !$model instanceof  Model) {
             $repositoryName = get_class($this);
             throw new Exception("{$repositoryName} provided model is invalid");
         }
@@ -147,6 +148,19 @@ abstract class BaseRepository
     protected function currentUser()
     {
         return app(AuthService::class)->getAuthenticatedUser();
+    }
+
+    /**
+     * Find by a given field or return null
+     *
+     * @param string g$field
+     * @param string $value
+     *
+     * @return Eloquent
+     */
+    public function findByOrNull($field, $value)
+    {
+        return $this->query()->where($field, $value)->first();
     }
 
     /**
