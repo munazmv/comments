@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
     {
         factory(User::class)->create([
             'email' => 'munaz7762650@gmail.com',
-            'avatar_path' => '/storage/avatars/default.png'
+            'avatar_path' => '/avatars/default.png'
         ]);
         factory(Comment::class, 5)->create();
     }
